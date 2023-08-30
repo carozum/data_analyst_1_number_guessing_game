@@ -19,7 +19,8 @@ def separator():
 def print_results(list):
     # function that displays the stats on the attempts
     print(f"""
-        number of attempts = {len(list)} 
+        scores are = {list}
+        number of games = {len(list)} 
         mean = {round(mean(list), 2)}
         mode = {mode(list)}
         median = {median(list)}""")
@@ -30,12 +31,12 @@ def start_game():
 
     # welcome
     print("\nWelcome to our Number Guessing Game !\n")
-    name = input("what is your name?   ").capitalize()
+    name = input("What is your name?   ").capitalize()
     separator()
 
     winning_number = random.randint(0, RANGE_NUMBER)
-    attempts = []
-    highest_score = 100
+    scores = []
+    tries = 0
 
     # continuous guess prompting
     while True:
@@ -55,30 +56,30 @@ def start_game():
                 print(err)
                 separator()
         else:
-            # attempts is a list of the guess inputs
-            attempts.append(guess)
+            tries += 1
 
             if guess == winning_number:
                 separator()
                 print("******** Got it ********")
 
-                # display the highest score
-                if len(attempts) <= highest_score:
-                    highest_score = len(attempts)
+                # save current score in scores list
+                scores.append(tries)
 
-                print_results(attempts)
-                print(f"The highest score is {highest_score}")
+                print_results(scores)
                 separator()
 
                 still_playing = input("Do you want to continue? Y/N     ")
 
                 # prompt the user for continuing to play or not
                 if still_playing.lower() == 'y':
-                    attempts = []
+                    tries = 0
                     winning_number = random.randint(0, 100)
+                    print(
+                        f"The highest score is {min(scores)}. Do you think you can do better?")
+                    separator()
                 else:
                     print(
-                        f"Goodbye {name}! Your highest score was {highest_score} attempts to guess a number.")
+                        f"\nGoodbye {name}! Your highest score was {min(scores)} tries to guess a number.\n")
                     break
 
             elif guess > winning_number:
